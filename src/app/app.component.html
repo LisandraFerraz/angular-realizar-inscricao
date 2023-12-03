@@ -44,7 +44,6 @@
     </mat-expansion-panel>
     
     <mat-expansion-panel 
-      #realizarinscricao
       [disabled]="alunoSelecionado ==0"
       (click)="validateAlunoSelecionado()"
       [expanded]="panelOpenState"
@@ -67,9 +66,13 @@
                 {{ disc.nome_disciplina }}
               </mat-checkbox>
             </div>
-            <div class="student-info" style="margin: 20px 10px;">
+            <div class="student-info" style="margin: 20px 10px;"  *ngIf="disciplinasConcluidas.length < ListDisciplinas.length">
               <span>Antes de confirmar a inscrição, verifique a quantidade de créditos disponíveis e o necessário para cada disciplina.</span>
             </div>
+
+            <p style="color: red; margin-left: 10px" *ngIf="disciplinasConcluidas.length >= ListDisciplinas.length">
+              O aluno já concluiu com aprovação todas as disciplinas disponíveis no momento.
+            </p>
 
           <div class="table-info" [@transitionHeight] *ngIf="discipinasSelecionadas.length">
             <table>

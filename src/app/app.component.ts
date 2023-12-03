@@ -34,7 +34,7 @@ export class AppComponent {
 
 
   ngOnInit(){
-    // this.infoInicial()
+    this.infoInicial()
   }
 
   // essa funcao puxa as informacoes do aluno selecionados
@@ -42,6 +42,8 @@ export class AppComponent {
     this.getDisciplina(1)
     this.alunoDetails = this.ListAlunos.filter((aluno) => this.alunoSelecionado == aluno.id_aluno)
     this.validateDisciplinasConcluidas()
+
+    console.log(this.disciplinasConcluidas.length)
 
     this.ListDisciplinas.filter(disciplina => disciplina.selected =false);
     this.discipinasSelecionadas =[]

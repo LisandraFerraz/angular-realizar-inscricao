@@ -218,7 +218,7 @@ export class AppComponent {
       return Swal.fire({
         icon: 'warning',
         html:`
-        <p>O aluno não pode se inscrever em mais disciplinas quando o custo total de créditos atinge 20..</p>
+        <p>O aluno não pode se inscrever em mais disciplinas quando o custo total de créditos atinge 20.</p>
         <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
         `,
         confirmButtonText:"Entendi"

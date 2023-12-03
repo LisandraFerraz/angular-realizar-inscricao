@@ -12,11 +12,9 @@
             <option value="0" selected>Selecione um perfil</option>
             <option *ngFor="let aluno of ListAlunos" [value]="aluno.id_aluno">{{ aluno.nome }}</option>
           </select>
-          
           <div class="table-info" [@transitionHeight] *ngIf="alunoSelecionado !=0">
             <div class="student-info">
               <span><b>Créditos disponíveis: </b>{{ alunoDetails[0].qtd_creditos }}</span>
-              <span><b>Turmas Inscritas nesse semestre: </b>{{ alunoDetails[0].qtd_turmas_inscritas }}</span>
             </div>
 
             <table>
@@ -46,9 +44,10 @@
     </mat-expansion-panel>
     
     <mat-expansion-panel 
+      #realizarinscricao
       [disabled]="alunoSelecionado ==0"
       (click)="validateAlunoSelecionado()"
-      [expanded]="false"
+      [expanded]="panelOpenState"
       style="cursor: pointer;"
       (opened)="panelOpenState = true"
       (closed)="panelOpenState = false  && alunoSelecionado ==0"

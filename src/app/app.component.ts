@@ -34,7 +34,7 @@ export class AppComponent {
 
 
   ngOnInit(){
-    this.infoInicial()
+    // this.infoInicial()
   }
 
   // essa funcao puxa as informacoes do aluno selecionados
@@ -257,6 +257,7 @@ export class AppComponent {
 
   expandNextStep(){
     this.panelOpenState = true
+    
   }
 
   validateAlunoSelecionado(){

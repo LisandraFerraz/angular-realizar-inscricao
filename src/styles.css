@@ -25,7 +25,7 @@ body{
 
 .container{
     border-radius: 15px;
-    width: 900px;
+    width: 1000px;
     height: fit-content;
     box-shadow: 0 0 20px #8b8b8b27;
     background-image: linear-gradient(to right, #ffffff25,#ffffff9f, #ffffff1f);
@@ -62,7 +62,7 @@ body{
 }
 
 .panel-content{
-    padding: 30px 10px;
+    padding: 30px 0;
 }
 
 .row-form{

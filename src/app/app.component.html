@@ -1,7 +1,7 @@
 <div class="container">
   <mat-accordion>
 
-    <mat-expansion-panel  [expanded]="false" style="margin-bottom: 15px;">
+    <mat-expansion-panel  [expanded]="true" style="margin-bottom: 15px;">
       <mat-expansion-panel-header class="panel-header">
         Escolha de perfil
       </mat-expansion-panel-header>
@@ -45,10 +45,10 @@
       </div> 
     </mat-expansion-panel>
     
-    <!-- [disabled]="alunoSelecionado ==0" -->
-    <!-- (click)="validateAlunoSelecionado()" -->
     <mat-expansion-panel 
-      [expanded]="true"
+      [disabled]="alunoSelecionado ==0"
+      (click)="validateAlunoSelecionado()"
+      [expanded]="false"
       style="cursor: pointer;"
       (opened)="panelOpenState = true"
       (closed)="panelOpenState = false  && alunoSelecionado ==0"
@@ -56,7 +56,7 @@
       <mat-expansion-panel-header class="panel-header">
           Realizar Inscrição
       </mat-expansion-panel-header>
-      <div class="panel-content">
+      <div class="panel-content"  style="cursor: default;">
         <div class="row-form">
           <label for="" class="form-label">Selecione uma ou mais disciplinas</label>
             <div class="row-checkbox-opts">
@@ -73,8 +73,6 @@
             </div>
 
           <div class="table-info" [@transitionHeight] *ngIf="discipinasSelecionadas.length">
-     
-
             <table>
               <thead>
                 <tr>
@@ -84,7 +82,7 @@
                   <th>Vagas Disponíveis</th>
                   <th>Vagas totais</th>
                   <th>Créditos Necessários</th>
-                  <!-- <th>Horários</th> -->
+                  <th>Horários</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,16 +93,15 @@
                   <td>{{ info.qtd_vagas_dispo }}</td>
                   <td>{{ info.qtd_vagas_max }}</td>
                   <td>{{ info.custo_credido }}</td>
-                  <!-- <td>
-                    {{ getDisciplina(detail.id_disciplina) }} 
-                  </td> -->
+                  <td>{{ info.horario }}</td>
+                  
                 </tr>
               </tbody>
             </table>
 
             <div class="row-credit-info">
              <b>Total créditos: </b> 
-             <span [class]="getTotalCreditosPorDisc() > alunoDetails[0].qtd_creditos ? 'danger-text' : ''">
+             <span [class]="getTotalCreditosPorDisc() > alunoDetails[0].qtd_creditos || getTotalCreditosPorDisc() > 20 ? 'danger-text' : ''">
               {{ getTotalCreditosPorDisc() }}
             </span>
             </div>

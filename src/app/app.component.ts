@@ -29,29 +29,33 @@ export class AppComponent {
   discipinasSelecionadas:IDisciplinas[] =[]
   tableInfoInscricao: any[] = []
   
+  listaEspera = []
   disciplinasConcluidas: {id_disciplina:  number, nome_disciplina: string}[] = []
 
 
   ngOnInit(){
-    // this.infoInicial()
+    this.infoInicial()
   }
 
-
+  // essa funcao puxa as informacoes do aluno selecionados
   setAlunoDetails(){
     this.getDisciplina(1)
-
     this.alunoDetails = this.ListAlunos.filter((aluno) => this.alunoSelecionado == aluno.id_aluno)
-      this.validateDisciplinasConcluidas()
+    this.validateDisciplinasConcluidas()
 
-    }
+    this.ListDisciplinas.filter(disciplina => disciplina.selected =false);
+    this.discipinasSelecionadas =[]
+    this.tableInfoInscricao = []
+  }
 
+  // essa funcao lista no html as disciplinas concluidas pelo aluno
   getDisciplina(id: number){
     let discplina = this.ListDisciplinas.filter((d) =>id == d.id_disciplina)
     return discplina[0].nome_disciplina
   }
   
+  // essa funcao puxa as informações das disciplinas selecionadas
   addItemToList(disc: any){
-    // puxa as informações das disciplinas selecionadas
     if(!Array.isArray(this.discipinasSelecionadas)){
       this.discipinasSelecionadas = []
     }
@@ -79,6 +83,7 @@ export class AppComponent {
           nome_disciplina: disc.nome_disciplina,
           id_disciplina: disc.id_disciplina,
           custo_credido: disc.custo_credido,
+          horario: disc.horario
         });
       }
     } else {
@@ -90,12 +95,11 @@ export class AppComponent {
 
   }
 
+  /* 
+  essa funcao verifica se as disicplinas em que o aluno foi aprovado
+  estao inclusas na lista de disciplinas selecionadas por ele
+  */ 
   validateDisciplinasConcluidas(){
-    /* 
-    essa funcao verifica se as disicplinas em que o aluno foi aprovado
-    estao inclusas na lista de disciplinas selecionadas por ele
-    */ 
-
     if(this.disciplinasConcluidas.length > 0) this.disciplinasConcluidas = []
 
     for (const aluno of this.alunoDetails){
@@ -107,63 +111,148 @@ export class AppComponent {
       }
      }
  
-    //  console.log("Disciplinas Concluídas: ", this.disciplinasConcluidas)
   }
 
   getTotalCreditosPorDisc(): number{
     const custoTotalDisciplinas = this.discipinasSelecionadas.reduce((total, disciplina) => total + disciplina.custo_credido, 0);
-    const creditosDispo = this.alunoDetails[0].qtd_creditos
-
     return custoTotalDisciplinas
   }
+  
+  /* 
+  abaixo ocorre a validação de horarios. caso existam horarios iguais em dois ou mais objetos
+  cria um array novo para armazenar esses objetos com o mesmo horario
+  */
+  setHorariosRepetidos(info){
+    let horariosRepetidos
+    const horariosVistos = {};
+    const objetosAgrupadosPorHorario = {};
+  
+    for (const objeto of info) {
+      const horario = objeto.horario;
+  
+      if (horariosVistos[horario]) {
+        objetosAgrupadosPorHorario[horario].push(objeto);
+      } else {
+        horariosVistos[horario] = true;
+        objetosAgrupadosPorHorario[horario] = [objeto];
+      }
+    }
+    horariosRepetidos = Object.values(objetosAgrupadosPorHorario).filter(arr => info.length > 1);
+    return horariosRepetidos
+  }
 
-  validateInscricao(){
-
+  validateInscricao(): any{
     const custoTotalDisciplinas = this.discipinasSelecionadas.reduce((total, disciplina) => total + disciplina.custo_credido, 0);
     const creditosDispo = this.alunoDetails[0].qtd_creditos
+    let horariosRepetidos = this.setHorariosRepetidos(this.tableInfoInscricao)
 
+    // apresenta um aviso informando os horarios em choque
+    if(horariosRepetidos[0]?.length >=2){
+
+      let listRepetidos = (arr) =>{
+        let disciplinas;
+        arr.forEach(d =>{
+          disciplinas += `<li>${d.nome_disciplina}.<b> Horário: ${d.horario}</b></li>`
+        })
+        return disciplinas.replace(/^undefined/, '')
+      }
+      
+      return Swal.fire({
+        icon: 'warning',
+        html: `
+        <div style="text-align: left;">
+        <p>Houve um choque nos horarios das seguintes disciplinas selecionadas:</p>
+        <uL>    
+          ${listRepetidos(horariosRepetidos[0])}
+        </uL>
+        <p>Por favor, selecione somente as disciplinas que não tenham horários conflitantes entre as demais.</p>
+        </div>
+        `,
+        confirmButtonText:"Entendi"
+      })
+    }
+    // verifica se existem disciplinas sem vagas e indica a possibilidade de adicionar na fila de espera
+    const result = this.tableInfoInscricao.filter(objeto => objeto.qtd_vagas_dispo === 0);
+    if(result?.length){
+      let listVagasIndispo = (arr) =>{
+        let vagas;
+        arr.forEach(d =>{
+          vagas += `<li>${d.nome_disciplina}.<b> Qtd. Vagas: ${d.qtd_vagas_dispo}</b></li>`
+        })
+        return vagas.replace(/^undefined/, '')
+      }
+      
+      return Swal.fire({
+        icon: 'warning',
+        html: `
+        <div style="text-align: left;">
+        <p>As seguintes disciplinas selecionadas não têm mais vagas:</p>
+        <uL>    
+          ${listVagasIndispo(result)}
+        </uL>
+        <p>Você deseja adicionar o aluno na lista de espera para futuras vagas?</p>
+        </div>
+        `,
+        showDenyButton: true,
+        confirmButtonText:"Sim",
+        denyButtonText:"Não"
+      }).then((res)=>{
+        if(res.isConfirmed){
+          this.listaEspera.push(this.alunoDetails)
+
+          let posicao = this.listaEspera.indexOf(this.alunoDetails) + 1
+          Swal.fire({
+            icon: 'success',
+            html: `
+            <p>Aluno adicionado na lista de espera. Posição atual: ${posicao}</p>
+            <small>Por favor, selecione somente as disciplinas com vagas disponíveis.</small>
+            `
+          })
+        }
+      })
+    }
+    // apresenta um aviso informando a quantidade de creditos inferior ao total das disicplinas selecionadas
     if(creditosDispo < custoTotalDisciplinas){
-      Swal.fire({
+      return Swal.fire({
         icon: 'warning',
         html:`
-        <p>Você tem ${creditosDispo} créditos disponíveis. Por favor, verifique o custo de cada disciplina e tente realizar a inscrição novamente.</p>
+        <p>O aluno tem ${creditosDispo} créditos disponíveis. Por favor, verifique o custo de cada disciplina e tente realizar a inscrição novamente.</p>
+        <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
+        `,
+        confirmButtonText:"Entendi"
+      })
+    }
+    // apresenta um aviso informando que a quantidade total de creditos das disicplinas é selecionadassuperior a 20
+    if(custoTotalDisciplinas > 20){
+      return Swal.fire({
+        icon: 'warning',
+        html:`
+        <p>O aluno não pode se inscrever em mais disciplinas quando o custo total de créditos atinge 20..</p>
         <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
         `,
         confirmButtonText:"Entendi"
       })
     }
 
-    console.log('resultado soma ', custoTotalDisciplinas)
+    // caso de sucesso e nenhum dos ifs barre o fluxo, segue cadastro normal
+    let listDisciplinasInscritas = (arr) =>{
+      let vagas;
+      arr.forEach(d =>{
+        vagas += `<li>${d.nome_disciplina}</li>`
+      })
+      return vagas.replace(/^undefined/, '')
+    }
 
-
-
-    // if(this.disciplinasConcluidas.length){
-    //   console.log("disciplinasCursadas",this.disciplinasConcluidas)
-
-    //   let listCursadas = (arr) =>{
-    //     let disciplinas;
-    //     arr.forEach(d =>{
-    //       disciplinas += `<li>${d.nome_disciplina}</li>`
-    //     })
-    //     return disciplinas.replace(/^undefined/, '')
-    //   }
+    Swal.fire({
+      icon: 'success',
+      html: `
+      <div style="text-align: left;">
+        <p>Aluno inscrito com sucesso nas seguintes disicplinas:</p>
+        <ul>${listDisciplinasInscritas(this.tableInfoInscricao)}</ul> 
+      <div>
       
-    //   Swal.fire({
-    //     icon: 'warning',
-    //     html: `
-    //     <div style="text-align: left;">
-    //     <p>O aluno ${this.alunoDetails[0].nome} <b>já foi aprovado</b> nas seguintes disciplinas selecionadas:</p>
-    //     <uL>    
-    //       ${listCursadas(this.disciplinasConcluidas)}
-    //     </uL>
-    //     <p>Por favor, selecione somente as disciplinas que o aluno ainda não completou.</p>
-    //     </div>
-    //     `,
-    //     confirmButtonText:"Entendi"
-    //   })
-    // }
-
-
+      `
+    })
   }
 
   expandNextStep(){

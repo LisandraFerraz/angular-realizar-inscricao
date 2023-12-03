@@ -213,23 +213,23 @@ export class AppComponent {
         }
       })
     }
-    // apresenta um aviso informando a quantidade de creditos inferior ao total das disicplinas selecionadas
-    if(creditosDispo < custoTotalDisciplinas){
-      return Swal.fire({
-        icon: 'warning',
-        html:`
-        <p>O aluno tem ${creditosDispo} créditos disponíveis. Por favor, verifique o custo de cada disciplina e tente realizar a inscrição novamente.</p>
-        <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
-        `,
-        confirmButtonText:"Entendi"
-      })
-    }
     // apresenta um aviso informando que a quantidade total de creditos das disicplinas é selecionadassuperior a 20
     if(custoTotalDisciplinas > 20){
       return Swal.fire({
         icon: 'warning',
         html:`
         <p>O aluno não pode se inscrever em mais disciplinas quando o custo total de créditos atinge 20..</p>
+        <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
+        `,
+        confirmButtonText:"Entendi"
+      })
+    }
+    // apresenta um aviso informando a quantidade de creditos inferior ao total das disicplinas selecionadas
+    if(creditosDispo < custoTotalDisciplinas){
+      return Swal.fire({
+        icon: 'warning',
+        html:`
+        <p>O aluno tem ${creditosDispo} créditos disponíveis. Por favor, verifique o custo de cada disciplina e tente realizar a inscrição novamente.</p>
         <small>A soma de crédito para as disciplinas selecionadas é <span class="danger-text">${custoTotalDisciplinas}.</span></small>
         `,
         confirmButtonText:"Entendi"

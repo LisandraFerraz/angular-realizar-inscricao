@@ -1,1 +1,183 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600;800&display=swap');
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-image: linear-gradient(to right, #a4d0e8,#dddddd, #C6C5F5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.title{
+    color: #23344F;
+    font-size: 18px;
+}
+
+.sub-title{
+    color: #23344F;
+    font-size: 16px;
+}
+
+.container{
+    border-radius: 15px;
+    width: 900px;
+    height: fit-content;
+    box-shadow: 0 0 20px #8b8b8b27;
+    background-image: linear-gradient(to right, #ffffff25,#ffffff9f, #ffffff1f);
+    padding: 50px;
+}
+
+.mat-accordion>.mat-expansion-panel-spacing:first-child, .mat-accordion>*:first-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing{
+    background-color: #ffffff97 !important;
+}
+
+.mat-expansion-panel-body{
+    background-color: transparent !important;
+}
+
+.panel-header{
+    height: 50px !important;
+    opacity: 1;
+    transition: all 0.5s ease-out;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #395768 !important;
+    text-transform: uppercase;
+    word-spacing: 5px;
+}
+
+.panel-header:hover{
+    opacity: 80%;
+}
+
+*> .panel-header,
+.mat-expansion-panel-header.mat-expanded:focus, 
+.mat-expansion-panel-header.mat-expanded:hover{
+    background-color:#D6EBF6 !important;
+}
+
+.panel-content{
+    padding: 30px 10px;
+}
+
+.row-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-label{
+    font-weight: 600 !important;
+    color: #454545f0 !important;
+    margin-bottom: 10px;
+}
+.input-form{
+    -webkit-border-radius: 5px;
+    height: 35px;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #454545c2 !important;
+    font-weight: 100;
+    outline: none;
+    cursor: pointer;
+    border-color: rgba(0, 0, 0, 0.341);
+}
+
+
+.table-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0 0;
+}
+
+.student-info{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+    text-align: left;
+    margin: 0 0 25px 0;
+    color: #454545 !important;
+}
+
+.student-info span{
+    font-size: 15px;
+}
+.student-info b{
+    font-weight: 600;
+}
+
+.default-btn{
+    border-radius: .25em;
+    transition: all 0.2s ease-in-out;
+    background-color: #7690D2;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 10px #00000064 ;
+    width: 180px;
+    height: 40px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.default-btn:hover{
+    background-color: #708ACD;
+}
+
+.table-info table{
+    border-radius: 5px;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 100%;
+    box-shadow: 0 0 20px #8b8b8b27;
+    margin-bottom: 25px;
+}
+
+.table-info thead{
+    background-color: #a4d0e8aa;
+}
+
+.table-info table th{
+    padding: 10px 30px;
+    border: solid 1px #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600 !important;
+}
+.table-info table td{
+    background-color: #ffffffc8;
+    border: solid 1px #cecece;
+    font-size: 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.danger-text{
+    color: red;
+}
+
+.row-credit-info{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 25px;
+}
+
+.row-credit-info span{
+    margin: 0 10px;
+}

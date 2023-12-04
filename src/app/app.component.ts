@@ -237,6 +237,7 @@ export class AppComponent {
     }
 
     // caso de sucesso e nenhum dos ifs barre o fluxo, segue cadastro normal
+    
     let listDisciplinasInscritas = (arr) =>{
       let vagas;
       arr.forEach(d =>{
@@ -246,15 +247,33 @@ export class AppComponent {
     }
 
     Swal.fire({
-      icon: 'success',
-      html: `
-      <div style="text-align: left;">
-        <p>Aluno inscrito com sucesso nas seguintes disicplinas:</p>
-        <ul>${listDisciplinasInscritas(this.tableInfoInscricao)}</ul> 
+      icon: 'question',
+      html:`
       <div>
-      
-      `
-    })
+        <p>Deseja revisar as informações antes de enviar os dados?</p>
+      <div>`,
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: "Revisar",
+      denyButtonText: "Prosseguir sem revisar",
+   
+      }).then((res)=>{
+        if(res.isConfirmed){
+          Swal.close()
+        }
+        else{
+          Swal.fire({
+            icon: 'success',
+            html: `
+            <div style="text-align: left;">
+              <p>Aluno inscrito com sucesso nas seguintes disicplinas:</p>
+              <ul>${listDisciplinasInscritas(this.tableInfoInscricao)}</ul> 
+            <div>`
+          })
+
+          console.log("Payload: ",this.tableInfoInscricao)
+        }
+      })
   }
 
   expandNextStep(){
